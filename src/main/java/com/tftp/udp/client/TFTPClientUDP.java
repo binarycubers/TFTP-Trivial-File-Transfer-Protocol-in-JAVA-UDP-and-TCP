@@ -14,32 +14,43 @@ public class TFTPClientUDP {
     private static final short OP_ACK = 4;
     private static final short OP_ERROR = 5;
     private static final int MAX_RETRIES = 5;
+    private static final String DOWNLOAD_DIRECTORY = "D:/Courses/New-Tasks/JAVA TFTP Task/TFTP-Implementation/TFTP-Implementation/tftp-download/";
 
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("TFTP Client");
-        System.out.println("1. Download File");
-        System.out.println("2. Upload File");
-        System.out.print("Choice: ");
-        int choice = scanner.nextInt();
-        scanner.nextLine();
 
-        System.out.print("Server Address: ");
-        InetAddress serverAddress = InetAddress.getByName(scanner.nextLine());
+        while (true) {
+            System.out.println("1. Download File");
+            System.out.println("2. Upload File");
+            System.out.println("3. Exit");
+            System.out.print("Choice: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
-        System.out.print("Filename: ");
-        String filename = scanner.nextLine();
+            if (choice == 3) {
+                System.out.println("Exiting...");
+                break;
+            }
 
-        if (choice == 1) {
-            downloadFile(serverAddress, filename);
-        } else if (choice == 2) {
-            uploadFile(serverAddress, filename);
-        } else {
-            System.out.println("Invalid choice!");
+            System.out.print("Server Address: ");
+            InetAddress serverAddress = InetAddress.getByName(scanner.nextLine());
+
+            System.out.print("Filename: ");
+            String filename = scanner.nextLine();
+
+            if (choice == 1) {
+                downloadFile(serverAddress, filename);
+            } else if (choice == 2) {
+                uploadFile(serverAddress, filename);
+            } else {
+                System.out.println("Invalid choice!");
+            }
         }
+        scanner.close();
     }
 
-    private static final String DOWNLOAD_DIRECTORY = "D:/Courses/New-Tasks/JAVA TFTP Task/TFTP-Implementation/TFTP-Implementation/tftp-download/";
+//    private static final String DOWNLOAD_DIRECTORY = "D:/Courses/New-Tasks/JAVA TFTP Task/TFTP-Implementation/TFTP-Implementation/tftp-download/";
 
     private static void downloadFile(InetAddress serverAddress, String filename) throws IOException {
         String outputFilename = DOWNLOAD_DIRECTORY + filename;
