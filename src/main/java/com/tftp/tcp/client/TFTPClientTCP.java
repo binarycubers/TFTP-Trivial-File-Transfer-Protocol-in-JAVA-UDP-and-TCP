@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class TFTPClientTCP {
     private static final String SERVER_IP = "localhost";
     private static final int SERVER_PORT = 9876;
+    private static final String DOWNLOAD_DIRECTORY = "D:\\Courses\\New-Tasks\\JAVA TFTP Task\\TFTP-Implementation\\TFTP-Implementation\\tftp-tcp-download\\";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -18,16 +19,21 @@ public class TFTPClientTCP {
         int choice = scanner.nextInt();
         scanner.nextLine(); // Consume newline
 
-        System.out.print("Filename: ");
-        String filename = scanner.nextLine();
-
         try (Socket socket = new Socket(SERVER_IP, SERVER_PORT);
              DataOutputStream out = new DataOutputStream(socket.getOutputStream());
              DataInputStream in = new DataInputStream(socket.getInputStream())) {
 
-            if (choice == 1) downloadFile(filename, out, in);
-            else if (choice == 2) uploadFile(filename, out);
-            else System.out.println("Invalid choice");
+            if (choice == 1) {
+                System.out.print("Filename to download: ");
+                String filename = scanner.nextLine();
+                downloadFile(filename, out, in);
+            } else if (choice == 2) {
+                System.out.print("Full path of the file to upload: ");
+                String filePath = scanner.nextLine();
+                uploadFile(filePath, out);
+            } else {
+                System.out.println("Invalid choice");
+            }
 
         } catch (IOException e) {
             System.err.println("Client error: " + e.getMessage());
@@ -45,25 +51,40 @@ public class TFTPClientTCP {
             return;
         }
 
-        try (FileOutputStream fos = new FileOutputStream("downloaded_" + filename)) {
+        // Create the output file in the download directory
+        String outputPath = DOWNLOAD_DIRECTORY + filename;
+        File outputFile = new File(outputPath);
+
+        // Ensure parent directories exist
+        File parentDir = outputFile.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
+        }
+
+        //Save the File
+        try (FileOutputStream fos = new FileOutputStream(outputFile)) {
             byte[] buffer = new byte[4096];
             int bytesRead;
             while ((bytesRead = in.read(buffer)) != -1) {
                 fos.write(buffer, 0, bytesRead);
             }
-            System.out.println("File downloaded successfully");
+            System.out.println("File downloaded successfully to: " + outputFile.getAbsolutePath());
         }
     }
 
-    private static void uploadFile(String filename, DataOutputStream out) throws IOException {
-        File file = new File(filename);
+    private static void uploadFile(String filePath, DataOutputStream out) throws IOException {
+        File file = new File(filePath);
+
         if (!file.exists()) {
-            System.err.println("File not found");
+            System.err.println("File not found: " + filePath);
             return;
         }
 
+        // Extract the filename from the full path
+        String filename = file.getName();
+
         out.writeInt(2); // WRQ
-        out.writeUTF(filename);
+        out.writeUTF(filename); // Send only the filename, not the full path
 
         try (FileInputStream fis = new FileInputStream(file)) {
             byte[] buffer = new byte[4096];
@@ -71,7 +92,7 @@ public class TFTPClientTCP {
             while ((bytesRead = fis.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesRead);
             }
-            System.out.println("File uploaded successfully");
+            System.out.println("File uploaded successfully: " + file.getAbsolutePath());
         }
     }
 }
