@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Project Information -->
+    <groupId>com.tftp</groupId>
+    <artifactId>tftp-protocols</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <!-- Properties -->
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- Build Configuration -->
+    <build>
+        <plugins>
+            <!-- Maven Compiler Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+            <!-- Maven JAR Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <!-- TCP Server -->
+                    <execution>
+                        <id>tcp-server-jar</id>
+                        <goals><goal>jar</goal></goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.tftp.tcp.server.TFTPServerTCP</mainClass>
+                                </manifest>
+                            </archive>
+                            <classifier>tcp-server</classifier>
+                        </configuration>
+                    </execution>
+
+                    <!-- TCP Client -->
+                    <execution>
+                        <id>tcp-client-jar</id>
+                        <goals><goal>jar</goal></goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.tftp.tcp.client.TFTPClientTCP</mainClass>
+                                </manifest>
+                            </archive>
+                            <classifier>tcp-client</classifier>
+                        </configuration>
+                    </execution>
+
+                    <!-- UDP Server -->
+                    <execution>
+                        <id>udp-server-jar</id>
+                        <goals><goal>jar</goal></goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.tftp.udp.server.TFTPServerUDP</mainClass>
+                                </manifest>
+                            </archive>
+                            <classifier>udp-server</classifier>
+                        </configuration>
+                    </execution>
+
+                    <!-- UDP Client -->
+                    <execution>
+                        <id>udp-client-jar</id>
+                        <goals><goal>jar</goal></goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.tftp.udp.client.TFTPClientUDP</mainClass>
+                                </manifest>
+                            </archive>
+                            <classifier>udp-client</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
