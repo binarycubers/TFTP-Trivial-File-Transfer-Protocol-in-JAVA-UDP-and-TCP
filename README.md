@@ -19,12 +19,6 @@ This project implements the **Trivial File Transfer Protocol (TFTP)** using **UD
 
 ---
 
-## **Project Structure**
-
-
-
----
-
 ## **Description of Key Files and Directories**
 
 ### **1. `src/`**
