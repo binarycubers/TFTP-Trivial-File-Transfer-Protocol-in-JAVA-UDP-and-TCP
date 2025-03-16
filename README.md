@@ -269,6 +269,7 @@ Follow the on-screen prompts to upload or download files.
 TFTP Client
 1. Download File
 2. Upload File
+3. Exit
    Choice:
 ```   
 - **Download File:** Enter the filename to download (e.g., resources/testfile.txt).
